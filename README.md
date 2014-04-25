@@ -22,5 +22,5 @@ defer reader.Close()
 
 imageColors, _ := image_color.New(reader)
 
-log.Println(imageColors.TopColors(5)) // return top 5 colors
+log.Println(imageColors.TopColors(5, 0.5)) // return the top 5 colors with 0.5 of distance
 ```

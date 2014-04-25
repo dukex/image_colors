@@ -63,7 +63,7 @@ func New(reader io.Reader) (*ImageColor, error) {
 	return &ImageColor{Colors: colors}, nil
 }
 
-func (ic *ImageColor) TopColors(n int) []string {
+func (ic *ImageColor) TopColors(n int, colorDistance float64) []string {
 	colors := make([]string, 0)
 	colorList := sortColorList(ic.Colors)
 	for i, color := range colorList {
@@ -74,7 +74,7 @@ func (ic *ImageColor) TopColors(n int) []string {
 				prev, _ := colorful.Hex(colorList[i-1].Key)
 				current, _ := colorful.Hex(color.Key)
 				distance := prev.DistanceRgb(current)
-				if distance > 0.25 {
+				if distance > colorDistance {
 					colors = append(colors, colorHex)
 				}
 			} else {
