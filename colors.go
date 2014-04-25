@@ -2,7 +2,6 @@ package image_colors
 
 import (
 	"fmt"
-	"github.com/lucasb-eyer/go-colorful"
 	"image"
 	"image/color"
 	"io"
@@ -10,6 +9,9 @@ import (
 
 	_ "image/jpeg"
 	_ "image/png"
+
+	"github.com/lucasb-eyer/go-colorful"
+	"github.com/nfnt/resize"
 )
 
 type Pair struct {
@@ -39,7 +41,9 @@ type ImageColor struct {
 }
 
 func New(reader io.Reader) (*ImageColor, error) {
-	d, _, err := image.Decode(reader)
+	originalImage, _, err := image.Decode(reader)
+
+	d := resize.Resize(200, 0, originalImage, resize.Lanczos3)
 
 	if err != nil {
 		return nil, err
