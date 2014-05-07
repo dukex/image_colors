@@ -43,7 +43,7 @@ type ImageColor struct {
 func New(reader io.Reader) (*ImageColor, error) {
 	originalImage, _, err := image.Decode(reader)
 
-	d := resize.Resize(200, 0, originalImage, resize.Lanczos3)
+	d := resize.Resize(100, 0, originalImage, resize.Lanczos3)
 
 	if err != nil {
 		return nil, err
@@ -74,9 +74,18 @@ func (ic *ImageColor) TopColors(n int, colorDistance float64) []string {
 				prev, _ := colorful.Hex(colorList[i-1].Key)
 				current, _ := colorful.Hex(color.Key)
 				distance := prev.DistanceRgb(current)
-				if distance > colorDistance {
-					colors = append(colors, colorHex)
+				if colorsCount > 1 {
+					prevPrev, _ := colorful.Hex(colorList[i-2].Key)
+					prevDistance := current.DistanceRgb(prevPrev)
+					if prevDistance > (colorDistance - 0.2) {
+						colors = append(colors, colorHex)
+					}
+				} else {
+					if distance > colorDistance {
+						colors = append(colors, colorHex)
+					}
 				}
+
 			} else {
 				colors = append(colors, colorHex)
 			}
